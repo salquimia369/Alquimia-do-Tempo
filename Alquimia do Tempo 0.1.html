@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Alquimia do Tempo</title>
+
+<style>
+:root{
+  --bg:#f5f5f5;
+  --card:#ffffff;
+  --text:#222;
+  --muted:#666;
+
+  --red:#d62828;
+  --orange:#f77f00;
+  --yellow:#fcbf49;
+  --green:#2a9d8f;
+  --blue-light:#4ea8de;
+  --indigo:#3a0ca3;
+  --violet:#7209b7;
+  --white:#ffffff;
+  --grey:#d6d6d6;
+
+  --water:#1d4ed8;
+  --air:#94a3b8;
+  --moon-blue:#3b82f6;
+}
+
+body{
+  font-family: Arial, sans-serif;
+  background:var(--bg);
+  margin:0;
+  padding:24px;
+  color:var(--text);
+}
+
+h1{
+  margin-top:0;
+  margin-bottom:20px;
+}
+
+.panel{
+  background:white;
+  padding:16px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  margin-bottom:20px;
+}
+
+label{
+  display:block;
+  margin-bottom:10px;
+}
+
+input,select,button{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+button{
+  cursor:pointer;
+  margin-right:8px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+
+.card{
+  padding:16px;
+  border-radius:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+  font-weight:400;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.card > div:first-child{
+  font-size:14px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin-bottom:6px;
+}
+
+.card > div:nth-child(2){
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.card .small{
+  font-size:13px;
+  font-weight:500;
+  opacity:0.8;
+}
+
+.stale{
+  color:var(--red);
+  font-weight:bold;
+  margin-left:12px;
+}
+
+/* chakras */
+.chakra-1{background:var(--red);color:white;}
+.chakra-2{background:var(--orange);color:white;}
+.chakra-3{background:var(--yellow);color:black;}
+.chakra-4{background:var(--green);color:white;}
+.chakra-5{background:var(--blue-light);color:white;}
+.chakra-6{background:var(--indigo);color:white;}
+.chakra-7{background:var(--violet);color:white;}
+.chakra-8{background:var(--white);color:black;border:1px solid #ddd;}
+
+/* luas */
+.lua-nova{background:var(--red);color:white;}
+.lua-crescente{background:var(--yellow);color:black;}
+.lua-cheia{background:var(--moon-blue);color:white;}
+.lua-minguante{background:#7c3aed;color:white;}
+
+/* elementos */
+.el-fogo{background:var(--red);color:white;}
+.el-terra{background:var(--yellow);color:black;}
+.el-agua{background:var(--water);color:white;}
+.el-ar{background:var(--air);color:black;}
+
+/* signos */
+.sign-fire{background:var(--red);color:white;}
+.sign-earth{background:var(--yellow);color:black;}
+.sign-air{background:var(--air);color:black;}
+.sign-water{background:var(--water);color:white;}
+
+/* substâncias */
+.sub-sulfur{background:#ef4444;color:white;}
+.sub-sal{background:#d1d5db;color:black;}
+.sub-mercurio{background:#94a3b8;color:black;}
+</style>
+</head>
+<body>
+
+<h1>Alquimia do Tempo</h1>
+
+<div class="panel">
+  <label>
+    Data e Hora
+    <input type="datetime-local" id="datetime">
+  </label>
+
+  <label>
+    Fuso horário
+    <select id="timezone">
+      <option value="America/Sao_Paulo">Brasília</option>
+      <option value="Atlantic/Cape_Verde">Cabo Verde</option>
+      <option value="Europe/Lisbon">Lisboa</option>
+    </select>
+  </label>
+
+  <button id="nowBtn">Agora</button>
+  <button id="computeBtn">Gerar identidade</button>
+  <span id="staleIndicator" class="stale"></span>
+</div>
+
+<div class="cards" id="output"></div>
+
+<script>
+const zodiacMeta = {
+  "Áries": {emoji:"♈", cls:"sign-fire"},
+  "Leão": {emoji:"♌", cls:"sign-fire"},
+  "Sagitário": {emoji:"♐", cls:"sign-fire"},
+
+  "Touro": {emoji:"♉", cls:"sign-earth"},
+  "Virgem": {emoji:"♍", cls:"sign-earth"},
+  "Capricórnio": {emoji:"♑", cls:"sign-earth"},
+
+  "Gêmeos": {emoji:"♊", cls:"sign-air"},
+  "Libra": {emoji:"♎", cls:"sign-air"},
+  "Aquário": {emoji:"♒", cls:"sign-air"},
+
+  "Câncer": {emoji:"♋", cls:"sign-water"},
+  "Escorpião": {emoji:"♏", cls:"sign-water"},
+  "Peixes": {emoji:"♓", cls:"sign-water"}
+};
+
+const moonMeta = {
+  "Nova":"lua-nova",
+  "Crescente":"lua-crescente",
+  "Cheia":"lua-cheia",
+  "Minguante":"lua-minguante"
+};
+
+const sunIngresses = [
+  { date:'2026-03-20T11:46:00', signo:'Áries' },
+  { date:'2026-04-19T22:39:00', signo:'Touro' },
+  { date:'2026-05-20T21:37:00', signo:'Gêmeos' }
+];
+
+const moonPhases = [
+  { date:'2026-04-01T23:12:00', phase:'Cheia', signo:'Libra' },
+  { date:'2026-04-10T01:50:00', phase:'Minguante', signo:'Capricórnio' },
+  { date:'2026-04-17T08:51:00', phase:'Nova', signo:'Áries' },
+  { date:'2026-04-23T23:32:00', phase:'Crescente', signo:'Leão' }
+];
+
+function lastEvent(arr, dt){
+  let found = null;
+  for(const item of arr){
+    const d = new Date(item.date);
+    if(d <= dt) found = item;
+  }
+  return found;
+}
+
+function chakraHora(hour){
+  if(hour>=6 && hour<9) return 1;
+  if(hour>=9 && hour<12) return 2;
+  if(hour>=12 && hour<15) return 3;
+  if(hour>=15 && hour<18) return 4;
+  if(hour>=18 && hour<21) return 5;
+  if(hour>=21 && hour<24) return 6;
+  if(hour>=0 && hour<3) return 7;
+  return 8;
+}
+
+function chakraOrdinal(n){
+  return `${n}º`;
+}
+
+function elemento(hour){
+  if(hour>=6 && hour<12) return ["Fogo","el-fogo"];
+  if(hour>=12 && hour<18) return ["Terra","el-terra"];
+  if(hour>=18 && hour<24) return ["Água","el-agua"];
+  return ["Ar","el-ar"];
+}
+
+function substancia(hour){
+  if(hour>=6 && hour<14) return ["Sulfur","sub-sulfur"];
+  if(hour>=14 && hour<22) return ["Sal","sub-sal"];
+  return ["Mercúrio","sub-mercurio"];
+}
+
+function card(title,value,cls="card",until=""){
+  return `<div class="card ${cls}">
+    <div>${title}</div>
+    <div style="font-size:22px;margin-top:6px">${value}</div>
+    ${until ? `<div class="small">até ${until}</div>` : ""}
+  </div>`;
+}
+function nextEvent(arr, dt){
+  for(const item of arr){
+    const d = new Date(item.date);
+    if(d > dt) return item;
+  }
+  return null;
+}
+
+function formatDateShort(dateStr){
+  const d = new Date(dateStr);
+  return d.toLocaleString("pt-PT", {
+    day:"2-digit",
+    month:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function nextHoraBoundary(hour){
+  if(hour < 6) return "às 06:00 horas";
+  if(hour < 9) return "às 09:00 horas";
+  if(hour < 12) return "às 12:00 horas";
+  if(hour < 15) return "às 15:00 horas";
+  if(hour < 18) return "às 18:00 horas";
+  if(hour < 21) return "às 21:00 horas";
+  return "às 00:00 horas";
+}
+
+function nextElementoBoundary(hour){
+  if(hour < 6) return "às 06:00 horas";
+  if(hour < 12) return "às 12:00 horas";
+  if(hour < 18) return "às 18:00 horas";
+  return "às 00:00 horas";
+}
+
+function nextSubBoundary(hour){
+  if(hour < 6) return "às 06:00 horas";
+  if(hour < 14) return "às 14:00 horas";
+  if(hour < 22) return "às 22:00 horas";
+  return "às 06:00 horas";
+}
+function gerar(){
+  const dtVal = document.getElementById("datetime").value;
+  if(!dtVal){
+    alert("Por favor, escolha a data e hora");
+    return;
+  }
+
+  const dt = new Date(dtVal);
+  const hour = dt.getHours() + dt.getMinutes()/60;
+
+  const sol = lastEvent(sunIngresses,dt);
+  const proxSol = nextEvent(sunIngresses,dt);
+
+  const lua = lastEvent(moonPhases,dt);
+  const proxLua = nextEvent(moonPhases,dt);
+
+  const chakraH = chakraHora(hour);
+  const [el,elCls] = elemento(hour);
+  const [sub,subCls] = substancia(hour);
+
+  let html = "";
+
+  if(sol){
+    const z = zodiacMeta[sol.signo];
+    html += card(
+      "Este mês, o Sol está em",
+      `${z.emoji} ${sol.signo}`,
+      z.cls,
+      proxSol ? formatDateShort(proxSol.date) : ""
+    );
+  }
+
+  if(lua){
+    const z = zodiacMeta[lua.signo];
+    html += card(
+      "Hoje, a Lua está",
+      `${lua.phase} em ${z.emoji} ${lua.signo}`,
+      moonMeta[lua.phase],
+      proxLua ? formatDateShort(proxLua.date) : ""
+    );
+  }
+
+  html += card(
+    "Chakra da Hora",
+    chakraOrdinal(chakraH),
+    `chakra-${chakraH}`,
+    nextHoraBoundary(hour)
+  );
+
+  html += card(
+    "Elemento",
+    el,
+    elCls,
+    nextElementoBoundary(hour)
+  );
+
+  html += card(
+    "Substância",
+    sub,
+    subCls,
+    nextSubBoundary(hour)
+  );
+
+  document.getElementById("output").innerHTML = html;
+  document.getElementById("staleIndicator").textContent = "";
+}
+document.getElementById("computeBtn").onclick = gerar;
+
+document.getElementById("nowBtn").onclick = () => {
+  const tz = document.getElementById("timezone").value;
+  const now = new Date();
+
+  const formatter = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: tz,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+
+  const parts = formatter.formatToParts(now);
+  const get = type => parts.find(p => p.type === type)?.value;
+
+  const formatted = `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}`;
+  document.getElementById("datetime").value = formatted;
+
+  // Chama gerar() imediatamente para atualizar os cards
+  gerar();
+};document.getElementById("datetime").oninput = ()=>{
+  document.getElementById("staleIndicator").textContent = "Estado desactualizado";
+};
+</script>
+</body>
+</html>
