@@ -423,13 +423,10 @@ button:hover{
       </div>
 
       <div class="section-title">
-        Mês · Arquétipo Maior
+        Arquétipo do Mês
       </div>
 
       <div class="section-description">
-        O plano macro do tempo:
-        identidade solar activa,
-        tom do ciclo e arquétipo dominante.
       </div>
 
     </div>
@@ -447,14 +444,10 @@ button:hover{
       <div class="section-kicker">
         ☽ CICLO LUNAR
       </div>
-
       <div class="section-title">
-        Dia · Movimento Simbólico
+        Fase da lua e chakra do dia
       </div>
-
       <div class="section-description">
-        Estado emocional,
-        fase alquímica e chakra dominante do ciclo lunar.
       </div>
 
     </div>
@@ -474,12 +467,10 @@ button:hover{
       </div>
 
       <div class="section-title">
-        Hora · Operação Activa
+        Elemento, chakra e substância horária
       </div>
 
       <div class="section-description">
-        Centro energético horário,
-        elemento temporal e substância alquímica activa.
       </div>
 
     </div>
@@ -1066,7 +1057,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
     monthHTML += card({
 
-      title:"Sol · Mês",
+      title:"",
 
       value:
         `${z.emoji} ${sol.signo}`,
@@ -1091,7 +1082,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
   dayHTML += card({
 
-    title:"Lua · Dia",
+    title:"",
 
     value:
       moon.phase,
@@ -1110,7 +1101,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
   dayHTML += card({
 
-    title:"Chakra · Dia",
+    title:"",
 
     value:
       `${daily}º Chakra`,
@@ -1135,7 +1126,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
   hourHTML += card({
 
-    title:"Elemento · Hora",
+    title:"",
 
     value:el,
 
@@ -1150,7 +1141,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
   hourHTML += card({
 
-    title:"Chakra · Hora",
+    title:"",
 
     value:
       `${hourly}º Chakra`,
@@ -1167,7 +1158,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
   hourHTML += card({
 
-    title:"Substância · Hora",
+    title:"",
 
     value:sub,
 
