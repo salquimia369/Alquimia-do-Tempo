@@ -3,14 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>Alquimia do Tempo</title>
 
 <style>
 :root{
-  --bg:#f5f5f5;
-  --card:#ffffff;
-  --text:#222;
-  --muted:#666;
+  --bg:#f3f4f6;
+  --panel:#ffffff;
+  --border:#e5e7eb;
+
+  --text:#111827;
+  --muted:#6b7280;
 
   --red:#d62828;
   --orange:#f77f00;
@@ -19,171 +22,505 @@
   --blue-light:#4ea8de;
   --indigo:#3a0ca3;
   --violet:#7209b7;
-  --white:#ffffff;
-  --grey:#d6d6d6;
 
   --water:#1d4ed8;
   --air:#94a3b8;
+
   --moon-blue:#3b82f6;
 }
 
-body{
-  font-family: Arial, sans-serif;
-  background:var(--bg);
-  margin:0;
-  padding:24px;
-  color:var(--text);
+*{
+  box-sizing:border-box;
 }
 
-h1{
-  margin-top:0;
-  margin-bottom:20px;
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+.container{
+  width:min(1450px,100%);
+  margin:auto;
+  padding:24px;
+}
+
+.app-title{
+  font-size:clamp(34px,5vw,58px);
+  margin:0;
+  font-weight:900;
+  letter-spacing:-2px;
+}
+
+.app-subtitle{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.6;
+  margin-bottom:32px;
 }
 
 .panel{
   background:white;
-  padding:16px;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-  margin-bottom:20px;
+  border-radius:24px;
+  padding:22px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 30px rgba(0,0,0,.05);
+  margin-bottom:34px;
 }
 
-label{
-  display:block;
-  margin-bottom:10px;
+.controls{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  align-items:end;
 }
 
-input,select,button{
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-size:14px;
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.field label{
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--muted);
+}
+
+input,
+select,
+button{
+  border:none;
+  border-radius:14px;
+  padding:14px 16px;
+  font-size:15px;
+}
+
+input,
+select{
+  border:1px solid var(--border);
+  background:#fafafa;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
 button{
   cursor:pointer;
-  margin-right:8px;
+  transition:.2s ease;
+  font-weight:800;
 }
+
+button:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:#111827;
+  color:white;
+}
+
+.btn-secondary{
+  background:white;
+  border:1px solid var(--border);
+}
+
+.status{
+  margin-top:14px;
+  color:#b91c1c;
+  font-weight:700;
+  font-size:14px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section{
+  margin-bottom:42px;
+}
+
+.section-header{
+  margin-bottom:18px;
+}
+
+.section-kicker{
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.section-title{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.section-description{
+  margin-top:6px;
+  color:var(--muted);
+  line-height:1.5;
+  max-width:780px;
+}
+
+/* =========================
+   GRID
+========================= */
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px;
+  gap:18px;
 }
 
+.cards-month{
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+}
+
+.cards-day{
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+
+.cards-hour{
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+}
+
+/* =========================
+   CARD
+========================= */
+
 .card{
-  padding:16px;
-  border-radius:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-  font-weight:400;
+  position:relative;
+  overflow:hidden;
+  min-height:210px;
+  border-radius:24px;
+  padding:22px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+  box-shadow:0 10px 28px rgba(0,0,0,.08);
 }
 
-.card > div:first-child{
-  font-size:14px;
-  font-weight:700;
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top right,
+    rgba(255,255,255,.18),
+    transparent 40%);
+  pointer-events:none;
+}
+
+.card-label{
+  font-size:12px;
+  font-weight:800;
   text-transform:uppercase;
-  letter-spacing:0.5px;
-  margin-bottom:6px;
+  letter-spacing:.12em;
+  opacity:.8;
 }
 
-.card > div:nth-child(2){
-  font-size:24px;
-  font-weight:700;
-  margin-bottom:6px;
+.card-value{
+  margin-top:10px;
+  font-size:34px;
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-1.5px;
 }
 
-.card .small{
+.card-description{
+  margin-top:10px;
+  font-size:15px;
+  line-height:1.4;
+  font-weight:600;
+  opacity:.95;
+}
+
+.card-meta{
+  margin-top:18px;
   font-size:13px;
-  font-weight:500;
-  opacity:0.8;
+  font-weight:700;
+  opacity:.85;
 }
 
-.stale{
-  color:var(--red);
-  font-weight:bold;
-  margin-left:12px;
+/* =========================
+   QUICK CALENDAR
+========================= */
+
+.quick-title{
+  margin:
+    50px 0
+    18px;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:-0.5px;
 }
 
-/* chakras */
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+
+.quick-card{
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  border:1px solid var(--border);
+  box-shadow:0 4px 12px rgba(0,0,0,.04);
+}
+
+.quick-date{
+  font-size:14px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.quick-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:999px;
+  flex-shrink:0;
+}
+
+/* =========================
+   CHAKRAS
+========================= */
+
 .chakra-1{background:var(--red);color:white;}
 .chakra-2{background:var(--orange);color:white;}
-.chakra-3{background:var(--yellow);color:black;}
+.chakra-3{background:var(--yellow);color:#111;}
 .chakra-4{background:var(--green);color:white;}
 .chakra-5{background:var(--blue-light);color:white;}
 .chakra-6{background:var(--indigo);color:white;}
 .chakra-7{background:var(--violet);color:white;}
-.chakra-8{background:var(--white);color:black;border:1px solid #ddd;}
 
-/* luas */
+.chakra-8{
+  background:#f3f4f6;
+  color:#111;
+  border:1px solid #d1d5db;
+}
+
+/* LUA */
+
 .lua-nova{background:var(--red);color:white;}
-.lua-crescente{background:var(--yellow);color:black;}
+.lua-crescente{background:var(--yellow);color:#111;}
 .lua-cheia{background:var(--moon-blue);color:white;}
 .lua-minguante{background:#7c3aed;color:white;}
 
-/* elementos */
-.el-fogo{background:var(--red);color:white;}
-.el-terra{background:var(--yellow);color:black;}
-.el-agua{background:var(--water);color:white;}
-.el-ar{background:var(--air);color:black;}
+/* SIGNOS */
 
-/* signos */
 .sign-fire{background:var(--red);color:white;}
-.sign-earth{background:var(--yellow);color:black;}
-.sign-air{background:var(--air);color:black;}
+.sign-earth{background:var(--yellow);color:#111;}
+.sign-air{background:var(--air);color:#111;}
 .sign-water{background:var(--water);color:white;}
 
-/* substâncias */
+/* ELEMENTOS */
+
+.el-fogo{background:var(--red);color:white;}
+.el-terra{background:var(--yellow);color:#111;}
+.el-agua{background:var(--water);color:white;}
+.el-ar{background:var(--air);color:#111;}
+
+/* SUBSTÂNCIAS */
+
 .sub-sulfur{background:#ef4444;color:white;}
-.sub-sal{background:#d1d5db;color:black;}
-.sub-mercurio{background:#94a3b8;color:black;}
+.sub-sal{background:#d1d5db;color:#111;}
+.sub-mercurio{background:#94a3b8;color:#111;}
+
+.sub-none{
+  background:#f3f4f6;
+  color:#111;
+  border:1px solid #d1d5db;
+}
+
+@media(max-width:640px){
+
+  .card{
+    min-height:185px;
+  }
+
+  .card-value{
+    font-size:28px;
+  }
+
+}
 </style>
 </head>
+
 <body>
 
-<h1>Alquimia do Tempo</h1>
+<div class="container">
 
-<div class="panel">
-  <label>
-    Data e Hora
-    <input type="datetime-local" id="datetime">
-  </label>
+  <h1 class="app-title">
+    Alquimia do Tempo
+  </h1>
 
-  <label>
-    Fuso horário
-    <select id="timezone">
-      <option value="America/Sao_Paulo">Brasília</option>
-      <option value="Atlantic/Cape_Verde">Cabo Verde</option>
-      <option value="Europe/Lisbon">Lisboa</option>
-    </select>
-  </label>
+  <p class="app-subtitle">
+    Descubra a identidade temporal do momento presente:
+    arquétipo solar, fase lunar, chakras,
+    elemento e substância alquímica activos.
+  </p>
 
-  <button id="nowBtn">Agora</button>
-  <button id="computeBtn">Gerar identidade</button>
-  <span id="staleIndicator" class="stale"></span>
+  <div class="panel">
+
+    <div class="controls">
+
+      <div class="field">
+        <label>Data e Hora</label>
+        <input type="datetime-local" id="datetime">
+      </div>
+
+      <div class="actions">
+
+        <button class="btn-secondary" id="nowBtn">
+          Agora
+        </button>
+
+        <button class="btn-primary" id="computeBtn">
+          Gerar identidade
+        </button>
+
+      </div>
+
+    </div>
+     <div class="status" id="staleIndicator"></div>
+  <div style="font-size:13px; color:var(--muted); margin-top:10px; font-weight:600;">🕐 Horários em Brasília (BRT) &nbsp;·&nbsp; 🇨🇻 +2h &nbsp;·&nbsp; 🇵🇹 +3h*
+            <span style="font-weight:400; display:block; margin-top:4px; font-size:12px;">*Portugal +4h durante horário de verão (mar–out)
+            </span>
+      </div>
+  </div>
+
+  <!-- MÊS -->
+
+  <section class="section">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        ☉ CICLO SOLAR
+      </div>
+
+      <div class="section-title">
+        Mês · Arquétipo Maior
+      </div>
+
+      <div class="section-description">
+        O plano macro do tempo:
+        identidade solar activa,
+        tom do ciclo e arquétipo dominante.
+      </div>
+
+    </div>
+
+    <div class="cards cards-month" id="monthOutput"></div>
+
+  </section>
+
+  <!-- DIA -->
+
+  <section class="section">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        ☽ CICLO LUNAR
+      </div>
+
+      <div class="section-title">
+        Dia · Movimento Simbólico
+      </div>
+
+      <div class="section-description">
+        Estado emocional,
+        fase alquímica e chakra dominante do ciclo lunar.
+      </div>
+
+    </div>
+
+    <div class="cards cards-day" id="dayOutput"></div>
+
+  </section>
+
+  <!-- HORA -->
+
+  <section class="section">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        ⌛ CICLO HORÁRIO
+      </div>
+
+      <div class="section-title">
+        Hora · Operação Activa
+      </div>
+
+      <div class="section-description">
+        Centro energético horário,
+        elemento temporal e substância alquímica activa.
+      </div>
+
+    </div>
+
+    <div class="cards cards-hour" id="hourOutput"></div>
+
+  </section>
+
+  <!-- CALENDÁRIO -->
+
+  <h2 class="quick-title">
+    Calendário rápido
+  </h2>
+
+  <div class="quick-grid" id="quickGrid"></div>
+
 </div>
 
-<div class="cards" id="output"></div>
-
 <script>
+
+/* =========================================
+   META
+========================================= */
+
 const zodiacMeta = {
-  "Áries": {emoji:"♈", cls:"sign-fire"},
-  "Leão": {emoji:"♌", cls:"sign-fire"},
-  "Sagitário": {emoji:"♐", cls:"sign-fire"},
 
-  "Touro": {emoji:"♉", cls:"sign-earth"},
-  "Virgem": {emoji:"♍", cls:"sign-earth"},
-  "Capricórnio": {emoji:"♑", cls:"sign-earth"},
+  "Áries":      {emoji:"♈", cls:"sign-fire"},
+  "Leão":       {emoji:"♌", cls:"sign-fire"},
+  "Sagitário":  {emoji:"♐", cls:"sign-fire"},
 
-  "Gêmeos": {emoji:"♊", cls:"sign-air"},
-  "Libra": {emoji:"♎", cls:"sign-air"},
-  "Aquário": {emoji:"♒", cls:"sign-air"},
+  "Touro":      {emoji:"♉", cls:"sign-earth"},
+  "Virgem":     {emoji:"♍", cls:"sign-earth"},
+  "Capricórnio":{emoji:"♑", cls:"sign-earth"},
 
-  "Câncer": {emoji:"♋", cls:"sign-water"},
-  "Escorpião": {emoji:"♏", cls:"sign-water"},
-  "Peixes": {emoji:"♓", cls:"sign-water"}
+  "Gêmeos":     {emoji:"♊", cls:"sign-air"},
+  "Libra":      {emoji:"♎", cls:"sign-air"},
+  "Aquário":    {emoji:"♒", cls:"sign-air"},
+
+  "Câncer":     {emoji:"♋", cls:"sign-water"},
+  "Escorpião":  {emoji:"♏", cls:"sign-water"},
+  "Peixes":     {emoji:"♓", cls:"sign-water"}
 };
 
 const moonMeta = {
@@ -193,197 +530,716 @@ const moonMeta = {
   "Minguante":"lua-minguante"
 };
 
+/* =========================================
+   SOL
+========================================= */
+
 const sunIngresses = [
+
+  { date:'2025-12-21T12:03:00', signo:'Capricórnio' },
+  { date:'2026-01-19T22:45:00', signo:'Aquário' },
+  { date:'2026-02-18T12:52:00', signo:'Peixes' },
   { date:'2026-03-20T11:46:00', signo:'Áries' },
   { date:'2026-04-19T22:39:00', signo:'Touro' },
-  { date:'2026-05-20T21:37:00', signo:'Gêmeos' }
+  { date:'2026-05-20T21:37:00', signo:'Gêmeos' },
+  { date:'2026-06-21T05:25:00', signo:'Câncer' },
+  { date:'2026-07-22T16:13:00', signo:'Leão' },
+  { date:'2026-08-22T23:19:00', signo:'Virgem' },
+  { date:'2026-09-22T21:05:00', signo:'Libra' },
+  { date:'2026-10-23T06:38:00', signo:'Escorpião' },
+  { date:'2026-11-22T04:23:00', signo:'Sagitário' },
+  { date:'2026-12-21T17:50:00', signo:'Capricórnio' }
+
 ];
 
-const moonPhases = [
+
+/* =========================================
+   LUA
+========================================= */
+
+const moonEvents = [
+
+  { date:'2025-12-19T22:43:00', phase:'Nova', signo:'Sagitário' },
+  { date:'2025-12-27T16:08:00', phase:'Crescente', signo:'Áries' },
+
+  { date:'2026-01-03T07:03:00', phase:'Cheia', signo:'Câncer' },
+  { date:'2026-01-10T12:49:00', phase:'Minguante', signo:'Libra' },
+  { date:'2026-01-18T16:51:00', phase:'Nova', signo:'Capricórnio' },
+  { date:'2026-01-26T01:46:00', phase:'Crescente', signo:'Touro' },
+
+  { date:'2026-02-01T19:09:00', phase:'Cheia', signo:'Leão' },
+  { date:'2026-02-09T09:43:00', phase:'Minguante', signo:'Escorpião' },
+  { date:'2026-02-17T09:01:00', phase:'Nova', signo:'Aquário' },
+  { date:'2026-02-24T09:27:00', phase:'Crescente', signo:'Gêmeos' },
+
+  { date:'2026-03-03T08:38:00', phase:'Cheia', signo:'Virgem' },
+  { date:'2026-03-11T06:38:00', phase:'Minguante', signo:'Sagitário' },
+  { date:'2026-03-18T22:23:00', phase:'Nova', signo:'Peixes' },
+  { date:'2026-03-25T16:18:00', phase:'Crescente', signo:'Câncer' },
+
   { date:'2026-04-01T23:12:00', phase:'Cheia', signo:'Libra' },
   { date:'2026-04-10T01:50:00', phase:'Minguante', signo:'Capricórnio' },
   { date:'2026-04-17T08:51:00', phase:'Nova', signo:'Áries' },
-  { date:'2026-04-23T23:32:00', phase:'Crescente', signo:'Leão' }
+  { date:'2026-04-23T23:32:00', phase:'Crescente', signo:'Leão' },
+
+  { date:'2026-05-01T14:23:00', phase:'Cheia', signo:'Escorpião' },
+  { date:'2026-05-09T18:09:00', phase:'Minguante', signo:'Aquário' },
+  { date:'2026-05-16T17:00:00', phase:'Nova', signo:'Touro' },
+  { date:'2026-05-23T08:11:00', phase:'Crescente', signo:'Virgem' },
+  { date:'2026-05-31T05:45:00', phase:'Cheia', signo:'Sagitário' },
+
+  { date:'2026-06-08T06:59:00', phase:'Minguante', signo:'Peixes' },
+  { date:'2026-06-14T23:54:00', phase:'Nova', signo:'Gêmeos' },
+  { date:'2026-06-21T18:56:00', phase:'Crescente', signo:'Libra' },
+  { date:'2026-06-29T20:56:00', phase:'Cheia', signo:'Capricórnio' },
+
+  { date:'2026-07-07T16:27:00', phase:'Minguante', signo:'Áries' },
+  { date:'2026-07-14T06:44:00', phase:'Nova', signo:'Câncer' },
+  { date:'2026-07-21T08:05:00', phase:'Crescente', signo:'Libra' },
+  { date:'2026-07-29T11:35:00', phase:'Cheia', signo:'Aquário' },
+
+  { date:'2026-08-05T23:20:00', phase:'Minguante', signo:'Touro' },
+  { date:'2026-08-12T14:37:00', phase:'Nova', signo:'Leão' },
+  { date:'2026-08-19T23:46:00', phase:'Crescente', signo:'Escorpião' },
+  { date:'2026-08-28T01:17:00', phase:'Cheia', signo:'Peixes' },
+
+  { date:'2026-09-04T04:50:00', phase:'Minguante', signo:'Gêmeos' },
+  { date:'2026-09-11T00:27:00', phase:'Nova', signo:'Virgem' },
+  { date:'2026-09-18T17:43:00', phase:'Crescente', signo:'Sagitário' },
+  { date:'2026-09-26T13:48:00', phase:'Cheia', signo:'Áries' },
+
+  { date:'2026-10-03T10:25:00', phase:'Minguante', signo:'Câncer' },
+  { date:'2026-10-10T12:50:00', phase:'Nova', signo:'Libra' },
+  { date:'2026-10-18T13:12:00', phase:'Crescente', signo:'Capricórnio' },
+  { date:'2026-10-26T01:11:00', phase:'Cheia', signo:'Touro' },
+
+  { date:'2026-11-01T17:29:00', phase:'Minguante', signo:'Leão' },
+  { date:'2026-11-09T04:02:00', phase:'Nova', signo:'Escorpião' },
+  { date:'2026-11-17T08:47:00', phase:'Crescente', signo:'Aquário' },
+  { date:'2026-11-24T11:53:00', phase:'Cheia', signo:'Gêmeos' },
+
+  { date:'2026-12-01T03:09:00', phase:'Minguante', signo:'Virgem' },
+  { date:'2026-12-08T21:51:00', phase:'Nova', signo:'Sagitário' },
+  { date:'2026-12-17T02:41:00', phase:'Crescente', signo:'Peixes' },
+  { date:'2026-12-23T22:28:00', phase:'Cheia', signo:'Câncer' },
+  { date:'2026-12-30T16:00:00', phase:'Minguante', signo:'Libra' }
+
 ];
 
+/* =========================================
+   CHAKRA DIÁRIO
+========================================= */
+
+const chakraRanges = [
+
+  /* =======================
+     1º CHAKRA
+  ======================= */
+  { start:"2025-12-19", end:"2025-12-22", chakra:1 },
+  { start:"2026-01-18", end:"2026-01-21", chakra:1 },
+  { start:"2026-02-17", end:"2026-02-19", chakra:1 },
+  { start:"2026-03-18", end:"2026-03-20", chakra:1 },
+  { start:"2026-04-17", end:"2026-04-19", chakra:1 },
+  { start:"2026-05-16", end:"2026-05-18", chakra:1 },
+  { start:"2026-06-14", end:"2026-06-16", chakra:1 },
+  { start:"2026-07-14", end:"2026-07-16", chakra:1 },
+  { start:"2026-08-12", end:"2026-08-14", chakra:1 },
+  { start:"2026-09-11", end:"2026-09-13", chakra:1 },
+  { start:"2026-10-10", end:"2026-10-13", chakra:1 },
+  { start:"2026-11-09", end:"2026-11-12", chakra:1 },
+  { start:"2026-12-08", end:"2026-12-11", chakra:1 },
+
+  /* =======================
+     2º CHAKRA
+  ======================= */
+  { start:"2025-12-23", end:"2025-12-26", chakra:2 },
+  { start:"2026-01-22", end:"2026-01-25", chakra:2 },
+  { start:"2026-02-20", end:"2026-02-23", chakra:2 },
+  { start:"2026-03-21", end:"2026-03-24", chakra:2 },
+  { start:"2026-04-20", end:"2026-04-22", chakra:2 },
+  { start:"2026-05-19", end:"2026-05-22", chakra:2 },
+  { start:"2026-06-17", end:"2026-06-20", chakra:2 },
+  { start:"2026-07-17", end:"2026-07-20", chakra:2 },
+  { start:"2026-08-15", end:"2026-08-18", chakra:2 },
+  { start:"2026-09-14", end:"2026-09-17", chakra:2 },
+  { start:"2026-10-14", end:"2026-10-17", chakra:2 },
+  { start:"2026-11-13", end:"2026-11-16", chakra:2 },
+  { start:"2026-12-12", end:"2026-12-16", chakra:2 },
+
+  /* =======================
+     3º CHAKRA
+  ======================= */
+  { start:"2025-12-27", end:"2025-12-29", chakra:3 },
+  { start:"2026-01-26", end:"2026-01-28", chakra:3 },
+  { start:"2026-02-24", end:"2026-02-26", chakra:3 },
+  { start:"2026-03-25", end:"2026-03-27", chakra:3 },
+  { start:"2026-04-23", end:"2026-04-26", chakra:3 },
+  { start:"2026-05-23", end:"2026-05-26", chakra:3 },
+  { start:"2026-06-21", end:"2026-06-24", chakra:3 },
+  { start:"2026-07-21", end:"2026-07-24", chakra:3 },
+  { start:"2026-08-19", end:"2026-08-22", chakra:3 },
+  { start:"2026-09-18", end:"2026-09-21", chakra:3 },
+  { start:"2026-10-18", end:"2026-10-21", chakra:3 },
+  { start:"2026-11-17", end:"2026-11-19", chakra:3 },
+  { start:"2026-12-17", end:"2026-12-19", chakra:3 },
+
+  /* =======================
+     4º CHAKRA
+  ======================= */
+  { start:"2025-12-30", end:"2026-01-02", chakra:4 },
+  { start:"2026-01-29", end:"2026-01-31", chakra:4 },
+  { start:"2026-02-27", end:"2026-03-02", chakra:4 },
+  { start:"2026-03-28", end:"2026-03-31", chakra:4 },
+  { start:"2026-04-27", end:"2026-04-30", chakra:4 },
+  { start:"2026-05-27", end:"2026-05-30", chakra:4 },
+  { start:"2026-06-25", end:"2026-06-28", chakra:4 },
+  { start:"2026-07-25", end:"2026-07-28", chakra:4 },
+  { start:"2026-08-23", end:"2026-08-27", chakra:4 },
+  { start:"2026-09-22", end:"2026-09-25", chakra:4 },
+  { start:"2026-10-22", end:"2026-10-25", chakra:4 },
+  { start:"2026-11-20", end:"2026-11-23", chakra:4 },
+  { start:"2026-12-20", end:"2026-12-22", chakra:4 },
+
+  /* =======================
+     5º CHAKRA
+  ======================= */
+  { start:"2026-01-03", end:"2026-01-05", chakra:5 },
+  { start:"2026-02-01", end:"2026-02-04", chakra:5 },
+  { start:"2026-03-03", end:"2026-03-06", chakra:5 },
+  { start:"2026-04-01", end:"2026-04-04", chakra:5 },
+  { start:"2026-05-01", end:"2026-05-04", chakra:5 },
+  { start:"2026-05-31", end:"2026-06-03", chakra:5 },
+  { start:"2026-06-29", end:"2026-07-02", chakra:5 },
+  { start:"2026-07-29", end:"2026-07-31", chakra:5 },
+  { start:"2026-08-28", end:"2026-08-30", chakra:5 },
+  { start:"2026-09-26", end:"2026-09-28", chakra:5 },
+  { start:"2026-10-26", end:"2026-10-28", chakra:5 },
+  { start:"2026-11-24", end:"2026-11-26", chakra:5 },
+  { start:"2026-12-23", end:"2026-12-25", chakra:5 },
+
+  /* =======================
+     6º CHAKRA
+  ======================= */
+  { start:"2026-01-06", end:"2026-01-09", chakra:6 },
+  { start:"2026-02-05", end:"2026-02-08", chakra:6 },
+  { start:"2026-03-07", end:"2026-03-10", chakra:6 },
+  { start:"2026-04-05", end:"2026-04-09", chakra:6 },
+  { start:"2026-05-05", end:"2026-05-08", chakra:6 },
+  { start:"2026-06-04", end:"2026-06-07", chakra:6 },
+  { start:"2026-07-03", end:"2026-07-06", chakra:6 },
+  { start:"2026-08-01", end:"2026-08-04", chakra:6 },
+  { start:"2026-08-31", end:"2026-09-03", chakra:6 },
+  { start:"2026-09-29", end:"2026-10-02", chakra:6 },
+  { start:"2026-10-29", end:"2026-10-31", chakra:6 },
+  { start:"2026-11-27", end:"2026-11-30", chakra:6 },
+  { start:"2026-12-26", end:"2026-12-29", chakra:6 },
+
+  /* =======================
+     7º CHAKRA
+  ======================= */
+  { start:"2026-01-10", end:"2026-01-13", chakra:7 },
+  { start:"2026-02-09", end:"2026-02-12", chakra:7 },
+  { start:"2026-03-11", end:"2026-03-13", chakra:7 },
+  { start:"2026-04-10", end:"2026-04-12", chakra:7 },
+  { start:"2026-05-09", end:"2026-05-11", chakra:7 },
+  { start:"2026-06-08", end:"2026-06-10", chakra:7 },
+  { start:"2026-07-07", end:"2026-07-09", chakra:7 },
+  { start:"2026-08-05", end:"2026-08-07", chakra:7 },
+  { start:"2026-09-04", end:"2026-09-06", chakra:7 },
+  { start:"2026-10-03", end:"2026-10-05", chakra:7 },
+  { start:"2026-11-01", end:"2026-11-04", chakra:7 },
+  { start:"2026-12-01", end:"2026-12-03", chakra:7 }
+
+];
+
+/* =========================================
+   HELPERS
+========================================= */
+
 function lastEvent(arr, dt){
+
   let found = null;
+
   for(const item of arr){
-    const d = new Date(item.date);
-    if(d <= dt) found = item;
+
+    const d =
+      new Date(item.date);
+
+    if(d <= dt){
+      found = item;
+    }
   }
+
   return found;
 }
 
-function chakraHora(hour){
-  if(hour>=6 && hour<9) return 1;
-  if(hour>=9 && hour<12) return 2;
-  if(hour>=12 && hour<15) return 3;
-  if(hour>=15 && hour<18) return 4;
-  if(hour>=18 && hour<21) return 5;
-  if(hour>=21 && hour<24) return 6;
-  if(hour>=0 && hour<3) return 7;
-  return 8;
-}
-
-function chakraOrdinal(n){
-  return `${n}º`;
-}
-
-function elemento(hour){
-  if(hour>=6 && hour<12) return ["Fogo","el-fogo"];
-  if(hour>=12 && hour<18) return ["Terra","el-terra"];
-  if(hour>=18 && hour<24) return ["Água","el-agua"];
-  return ["Ar","el-ar"];
-}
-
-function substancia(hour){
-  if(hour>=9 && hour<15) return ["Sulfur","sub-sulfur"];
-  if(hour>=15 && hour<21) return ["Sal","sub-sal"];
-  return ["Mercúrio","sub-mercurio"];
-}
-
-function card(title,value,cls="card",until=""){
-  return `<div class="card ${cls}">
-    <div>${title}</div>
-    <div style="font-size:22px;margin-top:6px">${value}</div>
-    ${until ? `<div class="small">até ${until}</div>` : ""}
-  </div>`;
-}
 function nextEvent(arr, dt){
+
   for(const item of arr){
-    const d = new Date(item.date);
-    if(d > dt) return item;
+
+    const d =
+      new Date(item.date);
+
+    if(d > dt){
+      return item;
+    }
   }
+
   return null;
 }
 
-function formatDateShort(dateStr){
-  const d = new Date(dateStr);
-  return d.toLocaleString("pt-PT", {
-    day:"2-digit",
-    month:"2-digit",
-    hour:"2-digit",
-    minute:"2-digit"
-  });
+/* =========================================
+   CHAKRA HORÁRIO
+========================================= */
+
+function chakraHour(hour){
+
+  if(hour >= 6 && hour < 9) return 1;
+  if(hour >= 9 && hour < 12) return 2;
+  if(hour >= 12 && hour < 15) return 3;
+  if(hour >= 15 && hour < 18) return 4;
+  if(hour >= 18 && hour < 21) return 5;
+  if(hour >= 21 && hour < 24) return 6;
+  if(hour >= 0 && hour < 3) return 7;
+
+  return 8;
 }
 
-function nextHoraBoundary(hour){
-  if(hour < 6) return "às 06:00 horas";
-  if(hour < 9) return "às 09:00 horas";
-  if(hour < 12) return "às 12:00 horas";
-  if(hour < 15) return "às 15:00 horas";
-  if(hour < 18) return "às 18:00 horas";
-  if(hour < 21) return "às 21:00 horas";
-  return "às 00:00 horas";
+function chakraHourBoundary(hour){
+
+  if(hour < 3) return "03:00";
+  if(hour < 6) return "06:00";
+  if(hour < 9) return "09:00";
+  if(hour < 12) return "12:00";
+  if(hour < 15) return "15:00";
+  if(hour < 18) return "18:00";
+  if(hour < 21) return "21:00";
+
+  return "00:00";
 }
 
-function nextElementoBoundary(hour){
-  if(hour < 6) return "às 06:00 horas";
-  if(hour < 12) return "às 12:00 horas";
-  if(hour < 18) return "às 18:00 horas";
-  return "às 00:00 horas";
-}
+/* =========================================
+   CHAKRA DIÁRIO
+========================================= */
 
-function nextSubBoundary(hour){
-  if(hour < 6) return "às 09:00 horas";
-  if(hour < 14) return "às 15:00 horas";
-  if(hour < 22) return "às 21:00 horas";
-  return "às 09:00 horas";
-}
-function gerar(){
-  const dtVal = document.getElementById("datetime").value;
-  if(!dtVal){
-    alert("Por favor, escolha a data e hora");
-    return;
+function dailyChakra(date){
+
+  const yyyy = date.getFullYear();
+
+  const mm = String(date.getMonth()+1)
+      .padStart(2,"0");
+
+  const dd = String(date.getDate())
+      .padStart(2,"0");
+
+  const key =
+    `${yyyy}-${mm}-${dd}`;
+
+  for(const range of chakraRanges){
+
+    if(key >= range.start &&
+       key <= range.end){
+
+      return range.chakra;
+    }
   }
 
-  const dt = new Date(dtVal);
-  const hour = dt.getHours() + dt.getMinutes()/60;
+  return 8;
+}
 
-  const sol = lastEvent(sunIngresses,dt);
-  const proxSol = nextEvent(sunIngresses,dt);
+/* =========================================
+   ELEMENTO
+========================================= */
 
-  const lua = lastEvent(moonPhases,dt);
-  const proxLua = nextEvent(moonPhases,dt);
+function elemento(hour){
 
-  const chakraH = chakraHora(hour);
-  const [el,elCls] = elemento(hour);
-  const [sub,subCls] = substancia(hour);
+  if(hour >= 6 && hour < 12){
+    return ["Fogo","el-fogo"];
+  }
+
+  if(hour >= 12 && hour < 18){
+    return ["Terra","el-terra"];
+  }
+
+  if(hour >= 18 && hour < 24){
+    return ["Água","el-agua"];
+  }
+
+  return ["Ar","el-ar"];
+}
+
+/* =========================================
+   SUBSTÂNCIA
+========================================= */
+
+function substancia(hour){
+
+  if(hour >= 9 && hour < 15){
+    return ["Sulfur","sub-sulfur"];
+  }
+
+  if(hour >= 15 && hour < 21){
+    return ["Sal","sub-sal"];
+  }
+
+  if(hour >= 21 || hour < 3){
+    return ["Mercúrio","sub-mercurio"];
+  }
+
+  return ["Nenhuma","sub-none"];
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+function card({
+  title,
+  value,
+  description="",
+  meta="",
+  cls=""
+}){
+
+  return `
+    <div class="card ${cls}">
+
+      <div>
+
+        <div class="card-label">
+          ${title}
+        </div>
+
+        <div class="card-value">
+          ${value}
+        </div>
+
+        ${
+          description
+          ? `<div class="card-description">${description}</div>`
+          : ""
+        }
+
+      </div>
+
+      ${
+        meta
+        ? `<div class="card-meta">${meta}</div>`
+        : ""
+      }
+
+    </div>
+  `;
+}
+
+/* =========================================
+   CALENDÁRIO
+========================================= */
+
+function renderQuickCalendar(baseDate){
+
+  const grid =
+    document.getElementById("quickGrid");
 
   let html = "";
 
-  if(sol){
-    const z = zodiacMeta[sol.signo];
-    html += card(
-      "Este mês, o Sol está em",
-      `${z.emoji} ${sol.signo}`,
-      z.cls,
-      proxSol ? formatDateShort(proxSol.date) : ""
-    );
+  for(let i=0;i<7;i++){
+
+    const d = new Date(baseDate.getTime());
+d.setDate(d.getDate() + i);
+
+    /* SOL */
+
+    const sol =
+      lastEvent(sunIngresses, d);
+
+    const solMeta =
+      zodiacMeta[sol.signo];
+
+    /* LUA */
+
+    const moon =
+      lastEvent(moonEvents, d);
+
+    const moonCls =
+      moonMeta[moon.phase];
+
+    const moonMetaSign =
+      zodiacMeta[moon.signo];
+
+    /* CHAKRA DIÁRIO */
+
+    const daily =
+      dailyChakra(d);
+
+    html += `
+      <div class="quick-card">
+
+        <div class="quick-date">
+          ${d.toLocaleDateString("pt-PT", {day:"2-digit",month:"2-digit"})}
+        </div>
+
+        <!-- SOL -->
+
+        <div class="quick-line">
+          <span class="dot ${solMeta.cls}"></span>
+          Sol em ${solMeta.emoji} ${sol.signo}
+        </div>
+
+        <!-- LUA -->
+
+        <div class="quick-line">
+          <span class="dot ${moonCls}"></span>
+          Lua ${moon.phase}
+        </div>
+
+        <div class="quick-line">
+          <span class="dot ${moonMetaSign.cls}"></span>
+          Lua em ${moonMetaSign.emoji} ${moon.signo}
+        </div>
+
+        <!-- CHAKRA -->
+
+        <div class="quick-line">
+          <span class="dot chakra-${daily}"></span>
+          ${daily}º Chakra
+        </div>
+
+      </div>
+    `;
   }
 
-  if(lua){
-    const z = zodiacMeta[lua.signo];
-    html += card(
-      "Hoje, a Lua está",
-      `${lua.phase} em ${z.emoji} ${lua.signo}`,
-      moonMeta[lua.phase],
-      proxLua ? formatDateShort(proxLua.date) : ""
-    );
-  }
-
-  html += card(
-    "Chakra da Hora",
-    chakraOrdinal(chakraH),
-    `chakra-${chakraH}`,
-    nextHoraBoundary(hour)
-  );
-
-  html += card(
-    "Elemento",
-    el,
-    elCls,
-    nextElementoBoundary(hour)
-  );
-
-  html += card(
-    "Substância",
-    sub,
-    subCls,
-    nextSubBoundary(hour)
-  );
-
-  document.getElementById("output").innerHTML = html;
-  document.getElementById("staleIndicator").textContent = "";
+  grid.innerHTML = html;
 }
-document.getElementById("computeBtn").onclick = gerar;
+/* =========================================
+   MAIN
+========================================= */
 
-document.getElementById("nowBtn").onclick = () => {
-  const tz = document.getElementById("timezone").value;
-  const now = new Date();
+function gerar(){
 
-  const formatter = new Intl.DateTimeFormat("sv-SE", {
-    timeZone: tz,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
+  const dtVal =
+    document.getElementById("datetime").value;
+
+  if(!dtVal){
+    alert("Escolhe data e hora.");
+    return;
+  }
+
+const dt = new Date(dtVal);
+
+const hour = dt.getHours() + (dt.getMinutes() / 60);
+
+  const sol =
+    lastEvent(sunIngresses, dt);
+
+  const proxSol =
+    nextEvent(sunIngresses, dt);
+
+  const moon =
+    lastEvent(moonEvents, dt);
+
+  const proxMoon =
+    nextEvent(moonEvents, dt);
+
+  const daily =
+    dailyChakra(dt);
+
+  const hourly =
+    chakraHour(hour);
+
+  const [el,elCls] =
+    elemento(hour);
+
+  const [sub,subCls] =
+    substancia(hour);
+
+  /* =====================
+     MÊS
+  ===================== */
+
+  let monthHTML = "";
+
+  if(sol){
+
+    const z =
+      zodiacMeta[sol.signo];
+
+    monthHTML += card({
+
+      title:"Sol · Mês",
+
+      value:
+        `${z.emoji} ${sol.signo}`,
+
+      description:
+        "Arquétipo solar activo.",
+
+      meta:
+        proxSol
+          ? `Até ${new Date(proxSol.date).toLocaleString("pt-PT", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}`
+          : "",
+
+      cls:z.cls
+    });
+  }
+
+  /* =====================
+     DIA
+  ===================== */
+
+  let dayHTML = "";
+
+  dayHTML += card({
+
+    title:"Lua · Dia",
+
+    value:
+      moon.phase,
+
+    description:
+      `${zodiacMeta[moon.signo].emoji} ${moon.signo}`,
+
+    meta:
+      proxMoon
+        ? `Até ${new Date(proxMoon.date).toLocaleString("pt-PT", {day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})}`
+        : "",
+
+    cls:
+      moonMeta[moon.phase]
   });
 
-  const parts = formatter.formatToParts(now);
-  const get = type => parts.find(p => p.type === type)?.value;
+  dayHTML += card({
 
-  const formatted = `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}`;
-  document.getElementById("datetime").value = formatted;
+    title:"Chakra · Dia",
 
-  // Chama gerar() imediatamente para atualizar os cards
-  gerar();
-};document.getElementById("datetime").oninput = ()=>{
-  document.getElementById("staleIndicator").textContent = "Estado desactualizado";
-};
+    value:
+      `${daily}º Chakra`,
+
+    description:
+      daily === 8
+        ? "Asa do Anjo · síntese e integração."
+        : "Ciclo lunar activo.",
+
+    meta:
+      "Baseado no ciclo lunar.",
+
+    cls:
+      `chakra-${daily}`
+  });
+
+  /* =====================
+     HORA
+  ===================== */
+
+  let hourHTML = "";
+
+  hourHTML += card({
+
+    title:"Elemento · Hora",
+
+    value:el,
+
+    description:
+      "Elemento temporal activo.",
+
+    meta:
+      "Ciclo diário.",
+
+    cls:elCls
+  });
+
+  hourHTML += card({
+
+    title:"Chakra · Hora",
+
+    value:
+      `${hourly}º Chakra`,
+
+    description:
+      "Centro energético horário.",
+
+    meta:
+      `Até às ${chakraHourBoundary(hour)}`,
+
+    cls:
+      `chakra-${hourly}`
+  });
+
+  hourHTML += card({
+
+    title:"Substância · Hora",
+
+    value:sub,
+
+    description:
+      sub === "Nenhuma"
+        ? "Período vazio/alquímico."
+        : "Correspondência alquímica.",
+
+    meta:
+      "Baseado no horário.",
+
+    cls:subCls
+  });
+
+  document.getElementById("monthOutput").innerHTML = monthHTML;
+  document.getElementById("dayOutput").innerHTML = dayHTML;
+  document.getElementById("hourOutput").innerHTML = hourHTML;
+
+  document.getElementById("staleIndicator").textContent = "";
+
+  renderQuickCalendar(dt);
+}
+
+/* =========================================
+   AGORA
+========================================= */
+
+function setNow(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,"0");
+
+  const y = now.getFullYear();
+  const m = pad(now.getMonth()+1);
+  const d = pad(now.getDate());
+  const hh = pad(now.getHours());
+  const mm = pad(now.getMinutes());
+
+  document.getElementById("datetime").value =
+    `${y}-${m}-${d}T${hh}:${mm}`;
+}
+
+/* =========================================
+   EVENTS
+========================================= */
+
+document
+  .getElementById("computeBtn")
+  .onclick = gerar;
+
+document
+  .getElementById("nowBtn")
+  .onclick = () => {
+
+    setNow();
+    gerar();
+  };
+
+document
+  .getElementById("datetime")
+  .oninput = () => {
+
+    document
+      .getElementById("staleIndicator")
+      .textContent =
+        "Estado desactualizado";
+  };
+
+
+setNow();
+gerar();
+
 </script>
+
 </body>
 </html>
