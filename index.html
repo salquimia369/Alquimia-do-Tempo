@@ -282,6 +282,18 @@ button:hover{
   box-shadow:0 4px 12px rgba(0,0,0,.04);
 }
 
+.quick-card.today {
+  border: 2px solid #111827;
+  background: #f9fafb;
+  box-shadow: 0 4px 16px rgba(0,0,0,.10);
+}
+
+.quick-date.today-label::after {
+  content: " · hoje";
+  font-weight: 400;
+  color: var(--muted);
+}
+
 .quick-date{
   font-size:14px;
   font-weight:900;
@@ -486,7 +498,27 @@ button:hover{
   </h2>
 
   <div class="quick-grid" id="quickGrid"></div>
-
+<div style="text-align:center; margin: 60px 0 20px; padding-top: 32px; border-top: 1px solid var(--border);">
+    <a href="https://salquimia369.github.io/oraculoalquimico/"
+       target="_blank"
+       rel="noopener"
+       style="
+         display:inline-block;
+         background:#111827;
+         color:white;
+         text-decoration:none;
+         padding:16px 32px;
+         border-radius:16px;
+         font-weight:800;
+         font-size:16px;
+         letter-spacing:-0.3px;
+         transition:.2s ease;
+       "
+       onmouseover="this.style.transform='translateY(-2px)'"
+       onmouseout="this.style.transform='translateY(0)'">
+      ⚗️ Aceder ao Oráculo Alquímico
+    </a>
+  </div>
 </div>
 
 <script>
@@ -929,67 +961,72 @@ function card({
 
 function renderQuickCalendar(baseDate){
 
-  const grid =
-    document.getElementById("quickGrid");
+  const grid = document.getElementById("quickGrid");
+  const todayKey = new Date().toLocaleDateString("sv"); // "2026-05-13"
 
   let html = "";
 
-  for(let i=0;i<7;i++){
+  for(let i = 0; i < 7; i++){
 
     const d = new Date(baseDate.getTime());
-d.setDate(d.getDate() + i);
+    d.setDate(d.getDate() + i);
+
+    const dayKey = d.toLocaleDateString("sv");
+    const isToday = dayKey === todayKey;
 
     /* SOL */
+    const sol = lastEvent(sunIngresses, d);
+    const solMeta = zodiacMeta[sol.signo];
 
-    const sol =
-      lastEvent(sunIngresses, d);
+    /* LUA — fase activa */
+    const moon = lastEvent(moonEvents, d);
+    const moonCls = moonMeta[moon.phase];
+    const moonMetaSign = zodiacMeta[moon.signo];
 
-    const solMeta =
-      zodiacMeta[sol.signo];
+    /* LUA — transição neste dia? */
+    const dayStart = new Date(d);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(d);
+    dayEnd.setHours(23, 59, 59, 999);
 
-    /* LUA */
+    const transicao = moonEvents.find(e => {
+      const ed = new Date(e.date);
+      return ed >= dayStart && ed <= dayEnd;
+    });
 
-    const moon =
-      lastEvent(moonEvents, d);
-
-    const moonCls =
-      moonMeta[moon.phase];
-
-    const moonMetaSign =
-      zodiacMeta[moon.signo];
+    const transicaoHTML = transicao
+      ? `<div class="quick-line" style="opacity:.7; font-size:12px;">
+           ↑ ${moonMeta[transicao.phase] ? transicao.phase : transicao.phase} 
+           às ${new Date(transicao.date).toLocaleTimeString("pt-PT", {hour:"2-digit", minute:"2-digit"})}
+         </div>`
+      : "";
 
     /* CHAKRA DIÁRIO */
-
-    const daily =
-      dailyChakra(d);
+    const daily = dailyChakra(d);
 
     html += `
-      <div class="quick-card">
+      <div class="quick-card${isToday ? " today" : ""}">
 
-        <div class="quick-date">
-          ${d.toLocaleDateString("pt-PT", {day:"2-digit",month:"2-digit"})}
+        <div class="quick-date${isToday ? " today-label" : ""}">
+          ${d.toLocaleDateString("pt-PT", {day:"2-digit", month:"2-digit"})}
         </div>
-
-        <!-- SOL -->
 
         <div class="quick-line">
           <span class="dot ${solMeta.cls}"></span>
           Sol em ${solMeta.emoji} ${sol.signo}
         </div>
 
-        <!-- LUA -->
-
         <div class="quick-line">
           <span class="dot ${moonCls}"></span>
           Lua ${moon.phase}
         </div>
 
+        ${transicaoHTML}
+
         <div class="quick-line">
           <span class="dot ${moonMetaSign.cls}"></span>
           Lua em ${moonMetaSign.emoji} ${moon.signo}
         </div>
-
-        <!-- CHAKRA -->
 
         <div class="quick-line">
           <span class="dot chakra-${daily}"></span>
