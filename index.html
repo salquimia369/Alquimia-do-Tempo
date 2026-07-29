@@ -48,7 +48,7 @@ body::before {
   background-image: url('images/bg.png');
   background-repeat: repeat;
   background-size: 33%;
-  opacity: 0.13;
+  opacity: 0.20;
   pointer-events: none;
   z-index: -1;
 }
@@ -298,7 +298,7 @@ button:hover{
 }
 
 .quick-date.today-label::after {
-  content: " · today";
+  content: " · hoje";
   font-weight: 400;
   color: var(--muted);
 }
@@ -394,12 +394,14 @@ button:hover{
 
 <div class="container">
 
-  <h1 class="app-title">Alchemy of Time</h1>
+  <h1 class="app-title">
+    Alquimia do Tempo
+  </h1>
 
   <p class="app-subtitle">
-  Discover the temporal identity of any moment:
-  solar archetype, lunar phase, chakras,
-  active element and alchemical substance.
+    Descubra a identidade temporal do momento presente:
+    arquétipo solar, fase lunar, chakras,
+    elemento e substância alquímica activos.
   </p>
 
   <div class="panel">
@@ -407,24 +409,29 @@ button:hover{
     <div class="controls">
 
       <div class="field">
-        <label>Date &amp; Time</label>
-        <input type="datetime-local" id="datetime" min="2026-01-01T00:00" max="2026-12-31T23:59">
+        <label>Data e Hora</label>
+        <input type="datetime-local" id="datetime">
       </div>
 
       <div class="actions">
 
-        <button class="btn-secondary" id="nowBtn">Now</button>
+        <button class="btn-secondary" id="nowBtn">
+          Agora
+        </button>
 
-        <button class="btn-primary" id="computeBtn">Generate</button>
+        <button class="btn-primary" id="computeBtn">
+          Gerar identidade
+        </button>
 
       </div>
 
     </div>
      <div class="status" id="staleIndicator"></div>
-  <div style="font-size:13px; color:var(--muted); margin-top:10px; font-weight:600;">
-  🕐 Times shown in UTC &nbsp;·&nbsp; 🇧🇷 Brasília −3h &nbsp;·&nbsp; 🇨🇻 Cape Verde −1h &nbsp;·&nbsp; 🇵🇹 Portugal +0/+1h &nbsp;·&nbsp; 🇬🇧 UK +0/+1h
-  <span style="font-weight:400; display:block; margin-top:4px; font-size:12px;">Adjust for your local time. Brasília is always UTC−3.</span>
-</div>
+  <div style="font-size:13px; color:var(--muted); margin-top:10px; font-weight:600;">🕐 Horários em Brasília (BRT) &nbsp;·&nbsp; 🇨🇻 +2h &nbsp;·&nbsp; 🇵🇹 +3h*
+            <span style="font-weight:400; display:block; margin-top:4px; font-size:12px;">*Portugal +4h durante horário de verão (mar–out)
+            </span>
+      </div>
+  </div>
 
   <!-- MÊS -->
 
@@ -433,11 +440,11 @@ button:hover{
     <div class="section-header">
 
       <div class="section-kicker">
-        ☉ SOLAR CYCLE
+        ☉ CICLO SOLAR
       </div>
 
       <div class="section-title">
-        Month · Solar Archetype
+        Arquétipo do Mês
       </div>
 
       <div class="section-description">
@@ -456,10 +463,10 @@ button:hover{
     <div class="section-header">
 
       <div class="section-kicker">
-        ☽ LUNAR CYCLE
+        ☽ CICLO LUNAR
       </div>
       <div class="section-title">
-        Lunar Phase and Daily Chakra
+        Fase da lua e chakra do dia
       </div>
       <div class="section-description">
       </div>
@@ -477,11 +484,11 @@ button:hover{
     <div class="section-header">
 
       <div class="section-kicker">
-        ⌛ HOURLY CYCLE
+        ⌛ CICLO HORÁRIO
       </div>
 
       <div class="section-title">
-        Hour · Element, Chakra & Substance
+        Elemento, chakra e substância horária
       </div>
 
       <div class="section-description">
@@ -496,7 +503,7 @@ button:hover{
   <!-- CALENDÁRIO -->
 
   <h2 class="quick-title">
-    Quick Calendar
+    Calendário rápido
   </h2>
 
   <div class="quick-grid" id="quickGrid"></div>
@@ -518,7 +525,7 @@ button:hover{
        "
        onmouseover="this.style.transform='translateY(-2px)'"
        onmouseout="this.style.transform='translateY(0)'">
-      ⚗️ Access the Alchemical Oracle
+      ⚗️ Aceder ao Oráculo Alquímico
     </a>
   </div>
 </div>
@@ -782,22 +789,36 @@ const chakraRanges = [
 ========================================= */
 
 function lastEvent(arr, dt){
+
   let found = null;
+
   for(const item of arr){
-    const d = new Date(item.date + "Z");
-    if(d <= dt) found = item;
+
+    const d =
+      new Date(item.date);
+
+    if(d <= dt){
+      found = item;
+    }
   }
+
   return found;
 }
 
 function nextEvent(arr, dt){
+
   for(const item of arr){
-    const d = new Date(item.date + "Z");
-    if(d > dt) return item;
+
+    const d =
+      new Date(item.date);
+
+    if(d > dt){
+      return item;
+    }
   }
+
   return null;
 }
-
 
 /* =========================================
    CHAKRA HORÁRIO
@@ -950,7 +971,7 @@ function card({
 function renderQuickCalendar(baseDate){
 
   const grid = document.getElementById("quickGrid");
-  const todayKey = new Date().toISOString().slice(0,10);
+  const todayKey = new Date().toLocaleDateString("sv"); // "2026-05-13"
 
   let html = "";
 
@@ -959,7 +980,7 @@ function renderQuickCalendar(baseDate){
     const d = new Date(baseDate.getTime());
     d.setDate(d.getDate() + i);
 
-    const dayKey = d.toISOString().slice(0,10);
+    const dayKey = d.toLocaleDateString("sv");
     const isToday = dayKey === todayKey;
 
     /* SOL */
@@ -978,13 +999,13 @@ const dayEnd = new Date(d);
 dayEnd.setHours(23, 59, 59, 999);
 
 const transicao = moonEvents.find(e => {
-  const ed = new Date(e.date + "Z");
+  const ed = new Date(e.date);
   return ed >= dayStart && ed <= dayEnd;
 });
 
 // fase anterior à transição (ou a activa se não há transição)
 const faseAntes = transicao
-  ? lastEvent(moonEvents, new Date(new Date(transicao.date + "Z").getTime() - 1))
+  ? lastEvent(moonEvents, new Date(new Date(transicao.date).getTime() - 1))
   : moon;
 
 const luaHTML = transicao
@@ -994,8 +1015,8 @@ const luaHTML = transicao
       Lua ${faseAntes.phase} em ${zodiacMeta[faseAntes.signo].emoji} ${faseAntes.signo}
     </div>
     <div class="quick-line" style="opacity:.75; font-size:12px; padding-left:4px;">
-    ↓ ${transicao.phase} in ${zodiacMeta[transicao.signo].emoji} ${transicao.signo}
-at ${new Date(transicao.date + "Z").toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}
+      ↓ ${transicao.phase} em ${zodiacMeta[transicao.signo].emoji} ${transicao.signo}
+      às ${new Date(transicao.date).toLocaleTimeString("pt-PT", {hour:"2-digit", minute:"2-digit"})}
     </div>`
   : `
     <div class="quick-line">
@@ -1015,7 +1036,7 @@ at ${new Date(transicao.date + "Z").toLocaleTimeString("en-GB", {hour:"2-digit",
 
         <div class="quick-line">
           <span class="dot ${solMeta.cls}"></span>
-          Sol in ${solMeta.emoji} ${sol.signo}
+          Sol em ${solMeta.emoji} ${sol.signo}
         </div>
 
         ${luaHTML}
@@ -1036,24 +1057,16 @@ at ${new Date(transicao.date + "Z").toLocaleTimeString("en-GB", {hour:"2-digit",
 ========================================= */
 
 function gerar(){
-// Sol
-meta: proxSol
-  ? `Until ${new Date(proxSol.date + "Z").toLocaleString("en-GB", {day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"})}`
-  : "",
 
-// Lua
-meta: proxMoon
-  ? `Until ${new Date(proxMoon.date + "Z").toLocaleString("en-GB", {day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"})}`
-  : "",
-  if(!dtVal){
-    alert("Choose date and time.");
-    return;
-  }
   const dtVal =
     document.getElementById("datetime").value;
 
+  if(!dtVal){
+    alert("Escolhe data e hora.");
+    return;
+  }
 
-const dt = new Date(dtVal + "Z");
+const dt = new Date(dtVal);
 
 const hour = dt.getHours() + (dt.getMinutes() / 60);
 
@@ -1100,7 +1113,7 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
         `${z.emoji} ${sol.signo}`,
 
       description:
-        "Active solar archetype.",
+        "Arquétipo solar activo.",
 
       meta:
         proxSol
@@ -1145,11 +1158,11 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
     description:
       daily === 8
-        ? '"Angel\'s Wing" · synthesis & integration.'
-        : "Active lunar cycle.",
+        ? "Asa do Anjo · síntese e integração."
+        : "Ciclo lunar activo.",
 
     meta:
-      "Based on the lunar cycle.",
+      "Baseado no ciclo lunar.",
 
     cls:
       `chakra-${daily}`
@@ -1168,10 +1181,10 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
     value:el,
 
     description:
-      "Active hourly element.",
+      "Elemento temporal activo.",
 
     meta:
-      "Daily cycle.",
+      "Ciclo diário.",
 
     cls:elCls
   });
@@ -1184,10 +1197,10 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
       `${hourly}º Chakra`,
 
     description:
-      "Active hourly energy centre.",
+      "Centro energético horário.",
 
     meta:
-      `Until ${chakraHourBoundary(hour)}`,
+      `Até às ${chakraHourBoundary(hour)}`,
 
     cls:
       `chakra-${hourly}`
@@ -1201,11 +1214,11 @@ const hour = dt.getHours() + (dt.getMinutes() / 60);
 
     description:
       sub === "Nenhuma"
-        ? "Empty/Alchemical period."
-        : "Alchemical correspondence.",
+        ? "Período vazio/alquímico."
+        : "Correspondência alquímica.",
 
     meta:
-      "Based on the time of day.",
+      "Baseado no horário.",
 
     cls:subCls
   });
@@ -1227,11 +1240,11 @@ function setNow(){
   const now = new Date();
   const pad = n => String(n).padStart(2,"0");
 
-  const y = now.getUTCFullYear();
-  const m = pad(now.getUTCMonth()+1);
-  const d = pad(now.getUTCDate());
-  const hh = pad(now.getUTCHours());
-  const mm = pad(now.getUTCMinutes());
+  const y = now.getFullYear();
+  const m = pad(now.getMonth()+1);
+  const d = pad(now.getDate());
+  const hh = pad(now.getHours());
+  const mm = pad(now.getMinutes());
 
   document.getElementById("datetime").value =
     `${y}-${m}-${d}T${hh}:${mm}`;
@@ -1260,7 +1273,7 @@ document
     document
       .getElementById("staleIndicator")
       .textContent =
-        "Out of date";
+        "Estado desactualizado";
   };
 
 
